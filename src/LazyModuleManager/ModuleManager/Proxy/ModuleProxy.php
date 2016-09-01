@@ -1,6 +1,6 @@
 <?php
 
-namespace LazyModuleManager\Proxy;
+namespace LazyModuleManager\ModuleManager\Proxy;
 
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\ModuleManagerInterface;

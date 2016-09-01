@@ -1,9 +1,9 @@
 <?php
 
-namespace LazyModuleManager;
+namespace LazyModuleManager\ModuleManager;
 
 use Zend\ModuleManager\ModuleManager as ZendModuleManager;
-use LazyModuleManager\Proxy\ModuleProxy;
+use LazyModuleManager\ModuleManager\Proxy\ModuleProxy;
 
 class ModuleManager extends ZendModuleManager
 {
