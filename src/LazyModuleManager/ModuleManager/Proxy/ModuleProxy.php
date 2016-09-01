@@ -4,7 +4,6 @@ namespace LazyModuleManager\ModuleManager\Proxy;
 
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\ModuleManagerInterface;
-use Zend\ModuleManager\ModuleEvent;
 
 class ModuleProxy
 {
@@ -48,8 +47,8 @@ class ModuleProxy
         if (empty($this->instance)) {
             $this->instance = $this->instantiate();
         }
-        
-        return call_user_method_array($method, $this->instance, $arguments);
+
+        return call_user_func_array([$this->instance, $method], $arguments);
     }
     
     /**
@@ -59,18 +58,22 @@ class ModuleProxy
      */
     protected function instantiate()
     {
-        $result = $this->getEventManager()->trigger(ModuleEvent::EVENT_LOAD_MODULE_RESOLVE, $this->moduleManager, $this->event, function ($r) {
-            return (is_object($r));
-        });
+        $moduleName = $this->moduleEvent->getModuleName();
+        $class      = $moduleName . '\Module';
 
-        $module = $result->last();
-        if (!is_object($module)) {
+        if (!class_exists($class)) {
+            $result = false;
+        } else {
+            $result = new $class;
+        }
+
+        if (!is_object($result)) {
             throw new Exception\RuntimeException(sprintf(
                 'Module (%s) could not be initialized.',
                 $this->event->getModuleName()
             ));
         }
 
-        return $module;
+        return $result;
     }
 }
